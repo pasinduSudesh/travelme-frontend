@@ -5,7 +5,8 @@ import axios from 'axios';
 
 import 'materialize-css/dist/css/materialize.min.css';
 // import M from 'materialize-css';
-import '../css/place.css'
+import '../css/place.css';
+import {connect} from 'react-redux';
 
 class Places extends Component{
 
@@ -23,21 +24,9 @@ class Places extends Component{
     }
 
     searchPlaces = e =>{
-        // console.log(this.state.placeName)
-        this.setState({loading:true})
-        var placeName = this.state.placeName;
-        axios.post('https://noderestapp.azurewebsites.net/crawlNearestPlaces',{place:placeName})
-        .then(response =>{
-            this.setState({
-                msg:true,
-                loading:false,
-                places:response.data.places
-            })
-            console.log(response.data.places);
-            console.log(this.state)
-        }).catch(function(err){
-            console.log(err);
-        });
+       
+        this.props.getData(this.state.placeName);
+       
 
         
     }
@@ -45,18 +34,22 @@ class Places extends Component{
     
 
     render(){
+        
+        
+        console.log(this.props);
+
 
         var placeDetails = <div></div>
 
-        if (! ( this.state.places === null)){
+        if ( ( this.props.state.fetchedPlace)){
 
-            placeDetails = this.state.places.map((place)=>(
+            placeDetails = this.props.state.searchedPlaces.map((place)=>(
 
             <div key={place.img} className="container">
                 <div className="col s12 m7">
                     <div className="card horizontal">
                         <div className="card-image">
-                            <img src={place.img} class="fadeIn" alt=""/>
+                            <img src={place.img} className="fadeIn" alt=""/>
                         </div>
                         <div className="card-stacked">
                             <div className="card-content">
@@ -92,9 +85,11 @@ class Places extends Component{
                             </div>
                         </div>
                     </div>
+                   
             </section>
-            {((this.state.loading)?(<div class="progress"><div class="indeterminate"></div></div>):(<div></div>))}
-            {(this.state.msg)?(
+            
+            {((this.props.state.loading)?(<div className="progress"><div className="indeterminate"></div></div>):(<div></div>))}
+            {(this.props.state.fetchedPlace)?(
                     <div>{placeDetails}</div>
             ):(
                 <div></div>
@@ -105,4 +100,29 @@ class Places extends Component{
     }
 }
 
-export default Places
+const getProps = (state)=>{
+    return{
+        state
+    }
+}
+
+const getPlaceDet = (dispatch) =>{
+    return {
+        getData: (place) => {
+            dispatch({type:'SEARCH_PLACE_BEFORE'})
+            axios.get(`https://noderestapp.azurewebsites.net/crawlNearestPlaces/${place}`)
+            .then( response=>{
+                if(response.status ===  200){
+                    dispatch({type:'SEARCH_PLACE_RECEIVED',payload:response.data.places})
+                }else{
+                    dispatch({type:'SEARCH_PLACES_ERROR',payload:'Error when fetching backend API'})
+                }
+            })
+            .catch(err=>{
+                dispatch({type:'SEARCH_PLACES_ERROR',payload:err.message})
+            })
+        }
+    }
+}
+
+export default connect(getProps,getPlaceDet) (Places)

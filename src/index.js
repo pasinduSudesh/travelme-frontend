@@ -4,13 +4,20 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import { Provider } from 'react-redux';
+import store from './reducers/rootReducer';
 
 
-// console.log(this.props);
+
+
 ReactDOM.render(
+  <Provider store={store}>
   <React.StrictMode>
+  
     <App />
-  </React.StrictMode>,
+   
+  </React.StrictMode>
+  </Provider>,
   document.getElementById('root')
 );
 
@@ -24,6 +31,7 @@ serviceWorker.unregister();
 // import './index.css';
 // import App from './App';
 // // import registerServiceWorker from './serviceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 // ReactDOM.render(<App />, document.getElementById('root'));
-// // registerServiceWorker();
+// registerServiceWorker();
