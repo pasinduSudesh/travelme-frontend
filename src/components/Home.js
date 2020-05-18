@@ -24,7 +24,7 @@ class Home extends Component{
     submitHandler = e =>{
         e.preventDefault();
         console.log(this.state);
-        axios.post('https://noderestapp.azurewebsites.net/addReview',this.state)
+        axios.post('https://noderestapp.azurewebsites.net/addReview',{name:this.state.name,place:this.state.place,review:this.state.review})
         .then(response =>{
             if (response.data){
                 this.setState({

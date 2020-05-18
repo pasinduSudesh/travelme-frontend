@@ -10,6 +10,7 @@ import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
 import '../css/place.css'
 import '../css/tripPlan.css'
+// import Places from './Places';
 
 
 
@@ -22,6 +23,7 @@ class TripPlan extends Component{
         place:null,
         loading: false,
         trip:null,
+        distances:null,
         errMsg:null
     }
 
@@ -62,7 +64,8 @@ class TripPlan extends Component{
         this.setState({loading:true});
         axios.post('https://noderestapp.azurewebsites.net/planTrip',{place:this.state.place,days:this.state.days})
         .then(response=>{
-            this.setState({trip:response.data,loading:false});
+            console.log(response)
+            this.setState({trip:response.data.trip,distances:response.data.distances,loading:false});
         })
         .catch(err=>{
             this.setState({errMsg:"Error when getting data"})
@@ -78,33 +81,43 @@ class TripPlan extends Component{
 
         if (! ( this.state.trip === null)){
 
-            placeDetails = this.state.trip.map((place)=>(
+            placeDetails = this.state.trip.map((place)=>
+            (
+                
 
-            <div key={place.placeId} className="container">
-                <div className="col s12 m7">
-                    <div className="card horizontal">
-                        <div className="card-image itemStyle">
-                            <img src={place.img} className="fadeIn imgStyle" alt=""/>
-                            
+            
+
+                <div key={place.placeId} className="center-trip">        
+                    <div className="grid">
+                        <div className="time ">
+                            <div className="bold-text pad"><strong>From</strong></div>
+                            <div className="italic-text pad">{place.startTimeH} : {place.startTimeM}</div>
+                            <div className="bold-text pad"><strong>To</strong></div>
+                            <div className="italic-text pad">{place.endTimeH} : {place.endTimeM}</div>
                         </div>
-                        <div className="card-stacked">
-                            <div className="card-content">
-                            <div className="row">
-                                
-                                <h5><i>Day {place.day} </i>  <strong>{place.placeName}</strong></h5>
-                                
-
+                        <div className="placeImage img-boder">
+                            <img src={place.img} alt=""/>
+                        </div>
+                        <div className="place-details">
+                            <div className="heading-det">
+                                <div className="place-name">{place.placeName}</div>
+                                <div className="days">Day {place.day}</div>
+                                <div>
+                                    <div className="details-det">
+                                        <div ><button className="place-address-button" onClick={()=>window.open('https://www.google.com/maps/dir/6.015787,80.23823/6.0186944,80.23941/@6.0172408,80.237756,10z','_blank')}> Chinthmaniya Watta, Pilana, Angulugaha.</button></div>
+                                        <div >rating: {place.rating}</div>
+                                        <div>
+                                            <p><strong>Best Review</strong></p>
+                                            <p>{place.bestReview}</p>
+                                        </div>
+                                    </div>
+                                </div> 
                             </div>
-                            <p>Rating {place.positivePresentage} % </p>
-                                {/* <p>{place.bestReview}</p> */}
-                            </div>
-                            {/* <div class="card-action">
-                                <a href="/">This is a link</a>
-                            </div> */}
                         </div>
                     </div>
                 </div>
-            </div>
+
+   
 
 ))
 }else{
