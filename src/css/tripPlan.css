@@ -135,3 +135,25 @@
   border-radius: 5px;
 }
 
+.padd{
+  padding: 10px;
+}
+
+.rating{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 2em;
+  color: indianred;
+  font-weight: bolder;
+  padding: 10px;
+}
+
+.reviews{
+  font-family: sans-serif;
+  padding: 10px;
+  color: dimgrey;
+}
+
+.pad{
+  padding:3px;
+  margin: 3px;
+}

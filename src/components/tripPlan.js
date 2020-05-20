@@ -8,10 +8,11 @@ import axios from 'axios';
 
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
-import '../css/place.css'
+// import '../css/place.css'
 import '../css/tripPlan.css'
 // import Places from './Places';
 import {connect} from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 
@@ -25,7 +26,8 @@ class TripPlan extends Component{
         loading: false,
         trip:null,
         distances:null,
-        errMsg:null
+        errMsg:null,
+        btnClicked:false
     }
 
     componentDidMount(){
@@ -87,11 +89,24 @@ class TripPlan extends Component{
 
     findNearestHotel = (place,lat,lng,id)=>{
         this.props.getNearestHotelDetails(place,lat,lng,id);
+        if(this.state.btnClicked){
+            this.setState({btnClicked:false})
+        }else{
+            this.setState({btnClicked:true})
+        }
+
     }
       
 
     render(){
         console.log(this.props);
+
+        var facilities = facArray  =>{
+            var facis = facArray.map((fac,i)=>(
+                (i<2)?(<span key={i} className="new badge">{fac}</span>):(<div></div>)
+            ))
+            return facis
+        }
 
         var hotels = id =>{
             var h = this.props.state.hotelsInTrip.find(ha=>ha.id === id)
@@ -107,10 +122,12 @@ class TripPlan extends Component{
                             <span className="card-title">{hotel.name}</span>
                             </div>
                             <div className="card-content">
-                            <p>{hotel.address}</p>
+                            {facilities(hotel.facilities)}
+                            
                             </div>
                             <div className="card-action">
-                            <a href="/" alt="">This is a link</a>
+                            
+                            <a href={hotel.hotelUrl} target="_blank" rel="noopener noreferrer" alt="">BOOKING DETAILS</a>
                             </div>
                         </div>
                         </div>
@@ -133,15 +150,23 @@ class TripPlan extends Component{
 
         if ( ( this.props.state.fetchedTripPlaceData)){
 
-            placeDetails = this.props.state.tripPlaces.map((place)=>
+            placeDetails = this.props.state.tripPlaces.map((place,i)=>
             (
                 
                 
                 <div key={place.placeId}>
-                {(place.startTimeH === 9)?(<div>
-                    <button onClick={() => this.findNearestHotel(this.state.place,place.lat,place.lng,place.placeId)}>Find Hotel</button>
-                    {(this.props.state.hotelsInTrip.length>0)?(<div>{hotels(place.placeId)}</div>):(<div></div>)}
+                {(place.startTimeH === "09")?(<div className="center padd">
+                    <button className="waves-effect waves-light btn" onClick={() => this.findNearestHotel(this.state.place,place.lat,place.lng,place.placeId)}>Find Hotel</button>
+                    {(this.props.state.hotelsInTrip.length>0 && this.state.btnClicked)?(<div>{hotels(place.placeId)}</div>):(<div></div>)}
                 </div>):(<div></div>)} 
+
+                <div className="center padd">
+                    {(place.startTimeH !== "09")?(
+                        <div>
+                            <button className="waves-effect waves-light btn" onClick={()=>window.open(`https://www.google.com/maps/dir/${this.props.state.tripPlaces[i-1].latLng}/${this.props.state.tripPlaces[i].latLng}`,'_blank')}>DISTANCE {Math.round(this.props.state.tripDistances[i-1].distance*100)/100} KM</button>
+                        </div>
+                        ):(<div></div>)}
+                </div>
 
                 <div  className="center-trip">     
                   
@@ -161,12 +186,13 @@ class TripPlan extends Component{
                                 <div className="days">Day {place.day}</div>
                                 <div>
                                     <div className="details-det">
-                                        <div ><button className="place-address-button" onClick={()=>window.open('https://www.google.com/maps/dir/6.015787,80.23823/6.0186944,80.23941/@6.0172408,80.237756,10z','_blank')}> Chinthmaniya Watta, Pilana, Angulugaha.</button></div>
-                                        <div >rating: {place.rating}</div>
-                                        <div>
+                                        <div ><button className="place-address-button" onClick={()=>window.open('https://www.google.com/maps/@6.015787,80.23823,10z','_blank')}>{place.address}</button></div>
+                                        <div className="rating">Rating: {Math.round(place.rating*10)/10}</div>
+                                        <div className="reviews">
                                            
                                             <p><strong>Best Review</strong></p>
                                             <p>{place.bestReview}</p>
+                                            <Link to={`/placeDetails/${place.placeId}`}><button className="btn btn-small">MORE</button></Link>
                                         </div>
                                     </div>
                                 </div> 
@@ -209,7 +235,7 @@ class TripPlan extends Component{
                 </div>
             </section>
         
-        
+        {(this.props.state.loading)?(<div className="progress"><div className="indeterminate"></div></div>):(<div></div>)}
         {(this.props.state.fetchedTripPlaceData)?(
             <section className="slider">
         <ul className="slides">
@@ -231,22 +257,23 @@ class TripPlan extends Component{
     </section>
 
         ):(
+            
             <section className="slider">
         <ul className="slides">
         <li>
                 <img src="https://image.ibb.co/mbCVnH/resort3.jpg" alt=""/>
                 <div className="caption right-align">
-                <h2>Best taxis for hire</h2>
-                <h5 className="light grey-text text-lighten-3 hide-on-small-only">We can hire best taxi riders for you</h5>
-                <a href="/" className="btn btn-large">Learn More</a>
+                <h2>Plan Your Trip</h2>
+                {/* <h5 className="light grey-text text-lighten-3 hide-on-small-only">Plan </h5> */}
+                {/* <a href="/" className="btn btn-large">Learn More</a> */}
                 </div>
             </li>
             <li>
                 <img src="https://image.ibb.co/mbCVnH/resort3.jpg" alt=""/>
-                <div className="caption right-align">
-                <h2>Best taxis for hire</h2>
-                <h5 className="light grey-text text-lighten-3 hide-on-small-only">We can hire best taxi riders for you</h5>
-                <a href="/" className="btn btn-large">Learn More</a>
+                <div className="caption left-align">
+                <h2>Plan Your Trip</h2>
+                {/* <h5 className="light grey-text text-lighten-3 hide-on-small-only">We can hire best taxi riders for you</h5> */}
+                {/* <a href="/" className="btn btn-large">Learn More</a> */}
                 </div>
             </li>
         </ul>
@@ -257,7 +284,7 @@ class TripPlan extends Component{
         
 
     <section>
-            {(this.props.state.loading)?(<div>loading</div>):(<div>{placeDetails}</div>)}
+            {(this.props.state.loading)?(<div></div>):(<div>{placeDetails}</div>)}
     </section>
     
     

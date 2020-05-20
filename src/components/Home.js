@@ -6,6 +6,8 @@ import axios from 'axios';
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
 import '../css/home.css'
+import {connect} from 'react-redux';
+
 
 class Home extends Component{
 
@@ -42,6 +44,9 @@ class Home extends Component{
     
 
     componentDidMount(){
+        //getting best places 
+        // this.props.getBestPlaces();
+
         const slider = document.querySelector('.slider');
         M.Slider.init(slider, {
             indicators: false,
@@ -71,23 +76,15 @@ class Home extends Component{
     }
 
     componentWillMount(){
-        axios.get('https://noderestapp.azurewebsites.net/bestPlaces')
-        .then(response=>{
-            this.setState({
-                bestplaces:response.data
-            })
-            console.log(response.data.place_000001.place)
-            console.log(this.state.bestplaces.place_000001.place)
-        }
-
-        ).catch(function(err){
-            console.log(err);
-        });
+        
+        this.props.getBestPlaces();     
 
     }
 
     render(){
         const {name, place,review} = this.state
+        // this.props.getBestPlaces();
+        // console.log(this.props.state);
         return(
             <div>
             {/* slider start */}
@@ -190,11 +187,11 @@ class Home extends Component{
                             <div className="card">
                                 <div className="card-image">
                                     {/* <img src="https://image.ibb.co/hbEMux/resort1.jpg" alt=""/> */}
-                                    <img src="https://media.tacdn.com/media/attractions-splice-spp-360x240/06/75/64/19.jpg" alt=""/>
-                                    <span className="card-title">Sigiriya</span>
+                                    <img src={this.props.state.bestPlaces[0].img} alt=""/>
+                                    <span className="card-title">{this.props.state.bestPlaces[0].place}</span>
                                 </div>
                                 <div className="card-content">
-                                    <p>This is the best place for see historical ruins in Sri Lanka</p>
+                                    <p>{this.props.state.bestPlaces[0].description}</p>
 
                                     {/* <img class="_34fe7l16" src="https://media.tacdn.com/media/attractions-splice-spp-360x240/06/75/64/19.jpg" alt="Day tour to Sigiriya &amp; Dambulla from Kandy by Aaliya Tou</img>rs"> */}
                                 </div>
@@ -203,11 +200,11 @@ class Home extends Component{
                         <div className="col s12 m4">
                             <div className="card">
                                 <div className="card-image">
-                                    <img src="https://media-cdn.tripadvisor.com/media/photo-s/10/fc/c7/b0/attractions-in-galle.jpg" alt=""/>
-                                    <span className="card-title">Galle Fort</span>
+                                    <img src={this.props.state.bestPlaces[1].img} alt=""/>
+                                    <span className="card-title">{this.props.state.bestPlaces[1].place}</span>
                                 </div>
                                 <div className="card-content">
-                                    <p>Clock tower and lighthouse is massive places to visit in galle fort
+                                    <p>{this.props.state.bestPlaces[1].description}
                                     </p>
                                 </div>
                             </div>
@@ -215,11 +212,11 @@ class Home extends Component{
                         <div className="col s12 m4">
                             <div className="card">
                                 <div className="card-image">
-                                    <img src="https://media-cdn.tripadvisor.com/media/photo-s/0e/54/77/64/watadage.jpg" alt=""/>
-                                    <span className="card-title">Polonnaruwa</span>
+                                    <img src={this.props.state.bestPlaces[2].img} alt=""/>
+                                    <span className="card-title">{this.props.state.bestPlaces[2].place}</span>
                                 </div>
                                 <div className="card-content">
-                                    <p>Polonnaruwa has best historical ruins in Sri Lanka. There are some status made by rocks are massive
+                                    <p>{this.props.state.bestPlaces[2].description}
                                     </p>
                                 </div>
                             </div>
@@ -272,22 +269,22 @@ class Home extends Component{
                     </h4>
                     <div className="row">
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?beach" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?polonnaruwa" alt=""/>
                         </div>
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?travel" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?galle" alt=""/>
                         </div>
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?nature" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?colombo" alt=""/>
                         </div>
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?beach, travel" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?matara" alt=""/>
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?beaches" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?srilanka" alt=""/>
                         </div>
                         <div className="col s12 m3">
                         <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?traveling" alt=""/>
@@ -372,4 +369,31 @@ class Home extends Component{
     }
 }
 
-export default Home
+
+const getProps = (state)=>{
+    return{
+        state
+    }
+}
+
+
+const getPlaceDet = (dispatch) =>{
+    return {
+        getBestPlaces: () => {
+            dispatch({type:'GET_BEST_PLACES_BEFORE'})
+            axios.get(`https://noderestapp.azurewebsites.net/bestPlaces`)
+            .then( response=>{
+                if(response.status ===  200){
+                    dispatch({type:'GET_BEST_PLACES_RECEIVED',payload:response.data.bestPlaces})
+                }else{
+                    dispatch({type:'GET_BEST_PLACES_ERROR',payload:'Error when fetching backend API'})
+                }
+            })
+            .catch(err=>{
+                dispatch({type:'GET_BEST_PLACES_ERROR',payload:err.message})
+            })
+        }
+    }
+}
+
+export default connect(getProps,getPlaceDet) (Home)
