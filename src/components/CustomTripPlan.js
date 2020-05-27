@@ -21,7 +21,7 @@ class CustomTrip extends Component{
             this.props.getPlaces(this.state.searchPlace);
             this.setState({errMsg:false})
         }else{
-            this.setState({errMsg:"Please Add Search Palce Name"})
+            this.setState({errMsg:"Please Add Search Palce Name."})
         }
         console.log(this.props.state)
     }
