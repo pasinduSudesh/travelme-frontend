@@ -31,14 +31,15 @@ const Navbar = () =>{
                             <NavLink to="/planTrip" className="nav-items">Trip Planer</NavLink>
                         </li>
                         <li>
+                            <NavLink to="/customTripPlan" className="nav-items">Custom Trip</NavLink>
+                        </li>
+                        <li>
                             <NavLink to="/places" className="nav-items">Places</NavLink>
                         </li>
                         <li>
                             <NavLink to="/hotels" className="nav-items">Hotels</NavLink>
                         </li>
-                        <li>
-                            <NavLink to="/taxi" className="nav-items">Taxi</NavLink>
-                        </li>
+                       
                         
                         
                     </ul>

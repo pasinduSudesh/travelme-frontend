@@ -234,8 +234,16 @@ class TripPlan extends Component{
                 </div>
                 </div>
             </section>
-        
-        {(this.props.state.loading)?(<div className="progress"><div className="indeterminate"></div></div>):(<div></div>)}
+
+            {(this.props.state.loading)?(<div className="progress"><div className="indeterminate"></div></div>):(<div></div>)}
+
+            {(this.props.state.errMsgPlace)?(<div>
+                <div class="alert">
+                    <strong>Error </strong> {this.props.state.errMsgPlace}
+                </div>
+            </div>):(<div>
+        {/* if no error runn tis */}
+       
         {(this.props.state.fetchedTripPlaceData)?(
             <section className="slider">
         <ul className="slides">
@@ -288,7 +296,7 @@ class TripPlan extends Component{
     </section>
     
     
-    
+    </div>)}
     
     </div>
 

@@ -185,12 +185,12 @@ class Home extends Component{
                         <span className="teal-text">Popular</span> Places</h4>
                         <div className="col s12 m4">
                             <div className="card">
-                                <div className="card-image">
+                                <div className="card-image crad-i">
                                     {/* <img src="https://image.ibb.co/hbEMux/resort1.jpg" alt=""/> */}
                                     <img src={this.props.state.bestPlaces[0].img} alt=""/>
                                     <span className="card-title">{this.props.state.bestPlaces[0].place}</span>
                                 </div>
-                                <div className="card-content">
+                                <div className="card-content card-c">
                                     <p>{this.props.state.bestPlaces[0].description}</p>
 
                                     {/* <img class="_34fe7l16" src="https://media.tacdn.com/media/attractions-splice-spp-360x240/06/75/64/19.jpg" alt="Day tour to Sigiriya &amp; Dambulla from Kandy by Aaliya Tou</img>rs"> */}
@@ -199,11 +199,11 @@ class Home extends Component{
                         </div>
                         <div className="col s12 m4">
                             <div className="card">
-                                <div className="card-image">
+                                <div className="card-image crad-i">
                                     <img src={this.props.state.bestPlaces[1].img} alt=""/>
                                     <span className="card-title">{this.props.state.bestPlaces[1].place}</span>
                                 </div>
-                                <div className="card-content">
+                                <div className="card-content card-c">
                                     <p>{this.props.state.bestPlaces[1].description}
                                     </p>
                                 </div>
@@ -211,11 +211,11 @@ class Home extends Component{
                         </div>
                         <div className="col s12 m4">
                             <div className="card">
-                                <div className="card-image">
+                                <div className="card-image crad-i">
                                     <img src={this.props.state.bestPlaces[2].img} alt=""/>
                                     <span className="card-title">{this.props.state.bestPlaces[2].place}</span>
                                 </div>
-                                <div className="card-content">
+                                <div className="card-content card-c">
                                     <p>{this.props.state.bestPlaces[2].description}
                                     </p>
                                 </div>

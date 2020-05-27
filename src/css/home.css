@@ -19,4 +19,13 @@
     margin-right: 20px;
     color: #f4f4f4;
   }
+  .card-c{
+    overflow:  hidden ;
+    height: 150px;
+  }
+  .crad-i img{
+    height: 200px;
+    width: 400px;
+    object-fit: cover;
+  }
 

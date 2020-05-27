@@ -11,7 +11,12 @@ const initState = {
     fetchedSeachHotels:false,
     loadingSingalPlaceDet:false,
     fetchedSinglePlaceDet:false,
+    loadingCustomTripPlace:false,
+    fetchedCustomTripPlace:false,
+    customTripPlaceErr:false,
     hotelsInTrip:[],
+    customTripPlan:false,
+    customTripPlaceArrray:[],
     searchHotelResults: [{
         "facilities": [
             "Free parking","Free High Speed Internet (WiFi)","Pool","Free breakfast","Children Activities (Kid / Family Friendly)","Pets Allowed ( Dog / Pet Friendly )",
@@ -88,7 +93,7 @@ const rootReducer = (state=initState, action) =>{
             return {...state,loading:true}            
         }
         case "PLAN_TRIP_GOT":{
-            return {...state,loading:false,fetchedTripPlaceData:true,tripPlaces:action.payload.trip,tripDistances:action.payload.distances,tripNumberOfDays:action.numOfDays,tripCenterPoint:action.placeName}            
+            return {...state,loading:false,fetchedTripPlaceData:true,tripPlaces:action.payload.trip,tripDistances:action.payload.distances,tripNumberOfDays:action.numOfDays,tripCenterPoint:action.placeName,errMsgPlace:false}            
         }
         case "PLAN_TRIP_ERROR":{
             return {...state,loading:false,fetchedPlace:false,errMsgPlace:action.payload}            
@@ -123,6 +128,25 @@ const rootReducer = (state=initState, action) =>{
         }
         case "SINGLE_PLACE_DETAILS_ERROR":{
             return {...state,loadingSingalPlaceDet:false,fetchedSinglePlaceDet:false,singlePlaceDetErr:action.payload}            
+        }
+        case "GET_PLACE_FOR_CUSTOM_TRIP_BEFORE":{
+            return {...state,loadingCustomTripPlace:true,fetchedCustomTripPlace:false,customTripPlaceErr:false}            
+        }
+        case "GET_PLACE_FOR_CUSTOM_TRIP_RECEIVED":{
+            return {...state,loadingCustomTripPlace:false,fetchedCustomTripPlace:true,customTripPlaceErr:false,customTripSearchPlaces:action.payload}            
+        }
+        case "GET_PLACE_FOR_CUSTOM_TRIP_ERROR":{
+            return {...state,loadingCustomTripPlace:false,fetchedCustomTripPlace:false,customTripPlaceErr:action.payload}            
+        }
+        case "APPEND_PLACE_TO_CUSTOM_TRIP":{
+            state.customTripPlaceArrray.push(action.payload)
+            return {...state}           
+        }
+        case "REMOVE_PLACE_FROM_CUSTOM_TRIP":{
+            var ss = state.customTripPlaceArrray.filter(a=>{
+                return (a.placeId !== action.payload.placeId)
+            })
+            return {...state,customTripPlaceArrray:ss}           
         }
         default:{
             return {...state}

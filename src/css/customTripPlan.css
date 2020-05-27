@@ -1,0 +1,184 @@
+*{box-sizing: border-box;}
+
+/* body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}  */
+
+input{
+    box-sizing: border-box !important;
+}
+.section-search input {
+    padding-left: 10px !important;
+    font-size: 18px !important;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: rgb(179, 177, 177);
+    width: 70% !important;
+    border: #05a79e 3px solid !important;
+    margin: 20px;
+  }
+
+.topnav-w3 {
+  overflow: hidden;
+  background-color: #f0f3f3;
+}
+
+.topnav-w3 a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav-w3 a:hover {
+  background-color: rgb(81, 233, 200);
+  color: black;
+}
+
+.topnav-w3 a.active {
+  background-color: #2196F3;
+  color: white;
+}
+
+.topnav-w3 .search-container-w3 {
+  float: right;
+}
+
+.topnav-w3 input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+}
+
+.topnav-w3 .search-container-w3 button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+
+.topnav-w3 .search-container-w3 button:hover {
+  background: rgb(4, 144, 121);
+}
+
+@media screen and (max-width: 600px) {
+  .topnav-w3 .search-container-w3 {
+    float: none;
+  }
+  .topnav-w3 div, .topnav-w3 input[type=text], .topnav-w3 .search-container-w3 button {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+  .topnav-w3 input[type=text] {
+    border: 1px solid #ccc;  
+  }
+}
+
+.search-bar{
+    float: left;
+  display: block;
+  color: #05a79e;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.search-bar-container{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    box-shadow: 5px 5px 40px grey;
+}
+.alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+  }
+
+.grid {
+display: grid;
+grid-gap: 5px;
+grid-template-columns: 50% 50%;
+background-color: floralwhite;
+
+
+}
+.img-sizing img{
+    height: 300px;
+    width: 150px;
+    object-fit: cover;
+}
+.grid-place-cart{
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+}
+.img-place-cart img{
+    height: 30px;
+    width: 30px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.img-place-cart{
+  display: inline;
+  text-align: center;
+}
+
+.array-text{
+    padding-left: 10px;
+}
+.b{
+    
+    display: inline-block;
+    margin: auto;
+}
+.padd-btn{
+    margin-left: 50px;
+    margin-right: 30px;
+}
+
+/* Container needed to position the button. Adjust the width as needed */
+.tile {
+  position: relative;
+  width: 50%;
+}
+
+/* Make the image responsive */
+.tile img {
+   height: 100%;
+    width: 100%; 
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Style the button and place it in the middle of the container/image */
+.tile .bt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.tile .bt:hover {
+  background-color: black;
+}
