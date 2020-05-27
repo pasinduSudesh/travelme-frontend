@@ -30,6 +30,7 @@ class Hotels extends Component{
     render(){
 
         console.log(this.props);
+        
 
         var facilities = facArray  =>{
             var facis = facArray.map((fac,i)=>(
