@@ -17,6 +17,7 @@ const initState = {
     hotelsInTrip:[],
     customTripPlan:false,
     customTripPlaceArrray:[],
+    fetchedCustomTripPlan:false,
     searchHotelResults: [{
         "facilities": [
             "Free parking","Free High Speed Internet (WiFi)","Pool","Free breakfast","Children Activities (Kid / Family Friendly)","Pets Allowed ( Dog / Pet Friendly )",
@@ -147,6 +148,18 @@ const rootReducer = (state=initState, action) =>{
                 return (a.placeId !== action.payload.placeId)
             })
             return {...state,customTripPlaceArrray:ss}           
+        }
+        case "CUSTOM_TRIP_PLAN_BEFORE":{
+            return {...state,loadingCustomTripPlace:true,loading:true}           
+        }
+        case "CUSTOM_TRIP_PLAN_RECEIVED":{
+            return {...state,loadingCustomTripPlace:false,loading:false,customTripPlan:true,fetchedTripPlaceData:true,tripPlaces:action.payload.trip,tripDistances:action.payload.distances,errMsgPlace:false,tripNumberOfDays:"1",tripCenterPoint:"custom"}           
+        }
+        case "CUSTOM_TRIP_PLAN_ERROR":{
+            return {...state,loadingCustomTripPlace:false}           
+        }
+        case "RESET_TRIP":{
+            return {...state,customTripPlan:false,customTripPlaceArrray:[]}           
         }
         default:{
             return {...state}

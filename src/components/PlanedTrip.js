@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 
 
 
-class TripPlan extends Component{
+class PlanedTrip extends Component{
 
     state = {
         days:1,
@@ -96,6 +96,10 @@ class TripPlan extends Component{
         }
 
     }
+
+    newTrip = () =>{
+        this.props.newTrip();
+    }
       
 
     render(){
@@ -117,7 +121,7 @@ class TripPlan extends Component{
                       
                         <div className="col s12 m4">
                         <div className="card">
-                            <div className="card-image">
+                            <div className="card-image img-sizing">
                             <img src={hotel.img} alt=""/>
                             <span className="card-title">{hotel.name}</span>
                             </div>
@@ -171,7 +175,7 @@ class TripPlan extends Component{
                 <div  className="center-trip">     
                   
                     <div className="grid-a">
-                        <div className="time">
+                        <div className="time ">
                             <div className="bold-text pad"><strong>From</strong></div>
                             <div className="italic-text pad">{place.startTimeH} : {place.startTimeM}</div>
                             <div className="bold-text pad"><strong>To</strong></div>
@@ -211,29 +215,9 @@ class TripPlan extends Component{
         
         return(<div>
 
-                <section id="search" className="section section-search teal darken-1 white-text center scrollspy">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col s12">
-                                <div className="input-field">
-                                    <div className="row">
-                                        <div className="col s12 m8">
-                                        <label className="place-labal">Destination</label>
-                                            <input className="white grey-text autocomplete" placeholder="Polonnaruwa, Galle, Sigiriya..." type="text" onChange={this.changePlaceHandler}id="autocomplete-input"/>
-                                        </div>
-                                    <div className="col s12 m4">
-                                        <label className="place-labal">Days {this.state.days}</label>
-                                        <button className="btn btn-small" onClick={this.up}><i className="large material-icons">arrow_upward</i></button> 
-                                        <button className="btn btn-small" onClick={this.down}><i className="large material-icons">arrow_downward</i></button> 
-                                    </div>  
-                                </div>                   
-                            </div>
-                        <button className="btn btn-large" onClick={this.planTrip}>search</button>
-
-                    </div>
-                </div>
-                </div>
-            </section>
+{(this.props.state.customTripPlan)?(<div className="center padd">
+                                <button className="btn btn-large padd-btn" onClick={()=>this.newTrip()}>New Trip</button>
+                            </div>):(<div></div>)}
 
             {(this.props.state.loading)?(<div className="progress"><div className="indeterminate"></div></div>):(<div></div>)}
 
@@ -250,7 +234,7 @@ class TripPlan extends Component{
             <li>
                 <img src={this.props.state.tripPlaces[0].img} Style=" object-fit: cover" alt=""/>
                 <div className="caption left-align">
-                <h2>{this.props.state.tripNumberOfDays} Days in {this.props.state.tripCenterPoint}</h2>
+               
                 
                 </div>
             </li>
@@ -258,7 +242,7 @@ class TripPlan extends Component{
             <img src={this.props.state.tripPlaces[1].img} Style=" object-fit: cover" alt=""/>
                 <div className="caption right-align">
                 
-                <h2>{this.props.state.tripNumberOfDays} Days in {this.props.state.tripCenterPoint}</h2>
+                
                 </div>
             </li>
         </ul>
@@ -340,9 +324,168 @@ const getPlaceDet = (dispatch) =>{
             .catch(err=>{
                 dispatch({type:'FIND_NEAREST_HOTEl_ERROR',payload:err.message})
             });
+        },
+        newTrip : ()=>{
+            dispatch({type:'RESET_TRIP'})
         }
         
     }
 }
 
-export default connect(getProps,getPlaceDet)(TripPlan)
+export default connect(getProps,getPlaceDet)(PlanedTrip)
+
+
+// import React, {Component}from 'react';
+// // import axios from 'axios';
+// // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// // import { facebook, youtube } from '@fortawesome/free-solid-svg-icons'
+
+// import 'materialize-css/dist/css/materialize.min.css';
+// // import M from 'materialize-css';
+// // import '../css/home.css';
+// import '../css/tripPlan.css';
+// import {connect} from 'react-redux';
+// import { Link } from 'react-router-dom';
+
+// class PlanedTrip extends Component{
+
+//     state = {
+//         btnClicked:false
+//     }
+
+//     findNearestHotel = (place,lat,lng,id)=>{
+//         this.props.getNearestHotelDetails(place,lat,lng,id);
+//         if(this.state.btnClicked){
+//             this.setState({btnClicked:false})
+//         }else{
+//             this.setState({btnClicked:true})
+//         }
+
+//     }
+//     render(){
+
+//         console.log(this.props);
+
+//         var facilities = facArray  =>{
+//             var facis = facArray.map((fac,i)=>(
+//                 (i<2)?(<span key={i} className="new badge">{fac}</span>):(<div></div>)
+//             ))
+//             return facis
+//         }
+
+//         var hotels = id =>{
+//             var h = this.props.state.hotelsInTrip.find(ha=>ha.id === id)
+//             if(h){
+
+//                 var hotelDet = h.data.map((hotel,index)=>(
+//                     <div key={index}>
+                      
+//                         <div className="col s12 m4">
+//                         <div className="card">
+//                             <div className="card-image">
+//                             <img src={hotel.img} alt=""/>
+//                             <span className="card-title">{hotel.name}</span>
+//                             </div>
+//                             <div className="card-content">
+//                             {facilities(hotel.facilities)}
+                            
+//                             </div>
+//                             <div className="card-action">
+                            
+//                             <a href={hotel.hotelUrl} target="_blank" rel="noopener noreferrer" alt="">BOOKING DETAILS</a>
+//                             </div>
+//                         </div>
+//                         </div>
+//                     </div>
+    
+                    
+//                 ))
+//                 return <div className="row">{hotelDet}</div>
+                
+//             }else{
+//                 return (<div></div>)
+//             }
+//         }
+
+//         var placeDetails = <div></div>
+
+//         if ( ( this.props.state.customTripPlan)){
+
+//             placeDetails = this.props.state.tripPlan.trip.map((place,i)=>
+//             (
+                
+                
+//                 <div key={place.placeId}>
+//                 {/* {(place.startTimeH === "09")?(<div className="center padd">
+//                     <button className="waves-effect waves-light btn" onClick={() => this.findNearestHotel(place.placeName,place.lat,place.lng,place.placeId)}>Find Hotel</button>
+//                     {(this.props.state.hotelsInTrip.length>0 && this.state.btnClicked)?(<div>{hotels(place.placeId)}</div>):(<div></div>)}
+//                 </div>):(<div></div>)}  */}
+
+//                 <div className="center padd">
+//                     {(place.startTimeH !== "09")?(
+//                         <div>
+//                             {/* <button className="waves-effect waves-light btn" onClick={()=>window.open(`https://www.google.com/maps/dir/${this.props.state.tripPlan.trip[i-1].latLng}/${this.props.state.tripPlan.trip[i].latLng}`,'_blank')}>DISTANCE {Math.round(this.props.state.tripDistances[i-1].distance*100)/100} KM</button> */}
+//                         </div>
+//                         ):(<div></div>)}
+//                 </div>
+
+//                 <div  className="center-trip">     
+                  
+//                     <div className="grid">
+//                         <div className="time ">
+//                             <div className="bold-text pad"><strong>From</strong></div>
+//                             <div className="italic-text pad">{place.startTimeH} : {place.startTimeM}</div>
+//                             <div className="bold-text pad"><strong>To</strong></div>
+//                             <div className="italic-text pad">{place.endTimeH} : {place.endTimeM}</div>
+//                         </div>
+//                         <div className="placeImage img-boder">
+//                             <img src={place.img} alt=""/>
+//                         </div>
+//                         <div className="place-details">
+//                             <div className="heading-det">
+//                                 <div className="place-name">{place.placeName}</div>
+//                                 <div className="days">Day {place.day}</div>
+//                                 <div>
+//                                     <div className="details-det">
+//                                         <div ><button className="place-address-button" onClick={()=>window.open('https://www.google.com/maps/@6.015787,80.23823,10z','_blank')}>{place.address}</button></div>
+//                                         <div className="rating">Rating: {Math.round(place.rating*10)/10}</div>
+//                                         <div className="reviews">
+                                           
+//                                             <p><strong>Best Review</strong></p>
+//                                             <p>{place.bestReview}</p>
+//                                             <Link to={`/placeDetails/${place.placeId}`}><button className="btn btn-small">MORE</button></Link>
+//                                         </div>
+//                                     </div>
+//                                 </div> 
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </div>
+// </div>
+   
+
+// ))
+// }else{
+//     placeDetails = <div></div>
+// }
+//         return(
+//             placeDetails
+//             // <div>sdsss</div>
+//         )
+//     }
+// }
+
+// const getProps = (state)=>{
+//     return{
+//         state
+//     }
+// }
+
+// const getPlaceDet = (dispatch) =>{
+//     return{
+
+//     }
+// }
+
+
+// export default connect(getProps,getPlaceDet) (PlanedTrip)

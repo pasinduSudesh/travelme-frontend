@@ -2,7 +2,10 @@ import React, {Component}from 'react';
 import axios from 'axios';
 // import M from 'materialize-css';
 import '../css/customTripPlan.css'
+import '../css/tripPlan.css'
 import {connect} from 'react-redux';
+
+import PlanedTrip from './PlanedTrip'
 
 class CustomTrip extends Component{
 
@@ -49,6 +52,14 @@ class CustomTrip extends Component{
         this.props.removePlace(place)
     }
 
+    custopTripPlan = () =>{
+        var ids = []
+        this.props.state.customTripPlaceArrray.forEach(i=>{
+            ids.push(i.placeId)
+        })
+        this.props.customTripPlan(ids);
+    }
+
     render() {
         console.log(this.props.state)
         var searchPlaces = <div></div>
@@ -83,18 +94,15 @@ class CustomTrip extends Component{
         var placeArray = <div></div>
         if(this.props.state.customTripPlaceArrray.length > 0){
             placeArray = this.props.state.customTripPlaceArrray.map( (p,i) =>(
-                <div key={i}>
-
-                    <div class="tile">
-                    {/* <img src={p.img} alt="Snow"/> */}
-                        <button class="bt">Button</button>
-                    </div>
+                <div key={i}>                  
                     
-                    {/* <div className="img-place-cart b">
-                    <img src={p.img} alt=""/>
-                        <button className="btn btn-small" onClick={()=>this.removePlaceFromArray(p)}></button>
-                        <p >{p.placeName}</p>
-                    </div> */}
+                    <div className="img-place-cart b">
+                    <img src={p.img} alt=""/>                        
+                    </div>
+                    <p >{p.placeName}</p>
+                    <button className="btn btn-small red" onClick={()=>this.removePlaceFromArray(p)}>X</button>
+                    
+
                 </div>
     //             <div class="card horizontal">
     //   <div class="card-image">
@@ -126,8 +134,9 @@ class CustomTrip extends Component{
                     {(this.props.state.customTripPlaceArrray.length > 0)?(
                         <div className="search-bar">
                             Search Places For Plan Your Trip  
-                            <button className="btn btn-large padd-btn">PLAN TRIP</button>
+                            <button className="btn btn-large padd-btn" onClick={()=>this.custopTripPlan()}>PLAN TRIP</button>
                             Estimated Days {Math.floor(this.props.state.customTripPlaceArrray.length/4)+1}
+                            
                         </div>
                     ):(
                         <div className="search-bar">
@@ -159,7 +168,7 @@ class CustomTrip extends Component{
                 
                 <section>
                     {(this.props.state.customTripPlan)?(
-                        <div></div>
+                        <div><PlanedTrip/></div>
                         ):(
                             <div>
                                 {(this.props.state.loadingCustomTripPlace)?(
@@ -174,6 +183,8 @@ class CustomTrip extends Component{
                             </div>
                             )}
                 </section>
+
+                
 
             </div>
         )
@@ -207,7 +218,22 @@ const dispatchProps = (dispatch) =>{
         },
         removePlace : (place) =>{
             dispatch({type:'REMOVE_PLACE_FROM_CUSTOM_TRIP',payload:place})
+        },
+        customTripPlan: (placeIds) =>{
+            dispatch({type:'CUSTOM_TRIP_PLAN_BEFORE'});
+            axios.post(`https://noderestapp.azurewebsites.net/customTripPlan`,{places:placeIds})
+            .then(response=>{
+                if(response.status === 200){
+                    dispatch({type:'CUSTOM_TRIP_PLAN_RECEIVED',payload:response.data})
+                }else{
+                    dispatch({type:'CUSTOM_TRIP_PLAN_ERROR',payload:'Error when getting data'})
+                }
+            })
+            .catch(err=>{
+                dispatch({type:'CUSTOM_TRIP_PLAN_ERROR',payload:err.message})
+            })
         }
+
         
     }
 }

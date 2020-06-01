@@ -23,10 +23,12 @@ class SingalPlace extends Component{
         return(
             <div>
             {(this.props.state.fetchedSinglePlaceDet)?(<div className="center">
+
+            <h4>{this.props.state.singlePlaceDet.placeName}</h4>
             
 
                
-                {this.props.state.singlePlaceDet.placeName}
+                
             </div>):(
                 <div>
                     {(this.props.state.loadingSingalPlaceDet)?(<div>Loading</div>):(<div></div>)}
