@@ -1,8 +1,23 @@
-import React from 'react';
+import React, {Component}from 'react';
 import { Link , NavLink} from 'react-router-dom';
 import '../css/navbar.css'
+import axios from 'axios';
+import GoogleLogin from 'react-google-login';
+import {connect} from 'react-redux';
 
-const Navbar = () =>{
+class Navbar extends Component{
+
+    state = {
+        email:false,
+        name:false
+    }
+    responseGoogle = (response) =>{
+        console.log(response)
+        this.setState({email:response.profileObj.email})
+        this.setState({name:response.profileObj.givenName})
+        this.props.login(this.state.email);
+    }
+    render(){
     return(
         // <nav className="nav-wrapper red bg-darken-4">
         //     <div className="container">
@@ -15,7 +30,8 @@ const Navbar = () =>{
         //     </div>
         // </nav>
 <div>
-            <div className="narbar-fixed">
+            <div className="navbar-fixed">
+
         <nav className="teal darken-2">
             <div className="container">
                 <div className="nav-wrapper">
@@ -23,6 +39,22 @@ const Navbar = () =>{
                     <a href="/" data-target="mobile-nav" className="sidenav-trigger">
                         <i className="material-icons">menu</i>
                     </a>
+                    <div className="right">
+                        {/* <button className="btn btn-small white">LogIn</button> */}
+                        <GoogleLogin
+                            clientId="1008932353060-je8amtlpk0i9uhnivtkj3j7drfhb218p.apps.googleusercontent.com"
+                            buttonText=""
+                            onSuccess={this.responseGoogle}
+                            onFailure={this.responseGoogle}
+                            cookiePolicy={'single_host_origin'}
+                        />
+                        
+                        
+                    </div>                
+                    <div>{(this.state.email)?(<div>
+                        <div className="float-button-name">{this.state.name}</div>
+                        <div className="float-button-email">{this.state.email}</div></div>
+                    ):(<div></div>)}</div>
                     <ul className="right hide-on-med-and-down">
                         <li>
                             <Link to="/" className="nav-items">Home</Link>
@@ -38,15 +70,21 @@ const Navbar = () =>{
                         </li>
                         <li>
                             <NavLink to="/hotels" className="nav-items">Hotels</NavLink>
-                        </li>
-                       
-                        
-                        
+                        </li> 
+                        <li>
+                            <NavLink to="/MyTrips" className="nav-items">My Trips</NavLink>
+                        </li> 
                     </ul>
+                    
                 </div>
+               
+                
             </div>
+            
         </nav>
     </div>
+
+    
     <ul className="sidenav" id="mobile-nav">
     <li>
       <a href="#home">Home</a>
@@ -66,6 +104,31 @@ const Navbar = () =>{
   </ul>  
   </div>
     )
+}}
+
+const getProps = (state)=>{
+    return{
+        state
+    }
 }
 
-export default Navbar
+const getPlaceDet = (dispatch) =>{
+    return {
+        login: (email)=>{
+            dispatch({type:'LOG_IN_USER_BEFORE'})
+            axios.post('https://noderestapp.azurewebsites.net/auth/login',{email:email})
+            .then(response=>{
+                console.log(response);
+                if(response.status ===  200){
+                    dispatch({type:'LOGGED_IN_USER',payload:email})
+                }else{
+                    dispatch({type:'LOG_IN_ERROR',payload:'Error when fetching backend API'})
+                }            
+            }).catch(err=>{
+                console.log(err);
+                dispatch({type:'LOG_IN_ERROR',payload:err.message})
+            })
+        }
+    }
+}
+export default connect(getProps,getPlaceDet) (Navbar)

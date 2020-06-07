@@ -1,9 +1,9 @@
 .nav-items:hover{
   background-color: whitesmoke ;
   color: teal;
-  width: 150px;
+  width: 120px;
   text-align: center;
-  transition: ease-in-out .8s;
+  transition: ease-in-out .4s;
 
 }
 
@@ -11,4 +11,21 @@
   width: 110px;
   text-align: center;
   transition: ease-in-out .2s;
+}
+
+.float-button-name{
+  position: fixed;
+  color: whitesmoke;
+  border-radius: 20px;
+  top:20px;
+  right: 20px;
+}
+
+.float-button-email{
+  position: fixed;
+  color: whitesmoke;
+  border-radius: 20px;
+  top:5px;
+  right: 20px;
+  font-size: 0.8em;
 }

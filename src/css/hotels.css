@@ -51,6 +51,14 @@
       padding: 10px;
   }
 
+  .hotel-img img{
+      height: 300px;
+      object-fit: cover;
+  }
+
+  .content-size{
+      height: 100px;
+  }
   /* img{
  
       object-fit: cover;

@@ -6,8 +6,10 @@ import axios from 'axios';
 import 'materialize-css/dist/css/materialize.min.css';
 // import M from 'materialize-css';
 import {connect} from 'react-redux';
+import '../css/singlePlace.css'
 // import { withScriptjs, withGoogleMap, GoogleMap} from "react-google-maps"
- 
+import { Link } from 'react-router-dom';
+
 
 
 
@@ -15,25 +17,94 @@ class SingalPlace extends Component{
    componentWillMount(){
         this.props.getData(this.props.match.params.id);
      }
+
+     componentDidUpdate(){
+        // this.props.getData(this.props.match.params.id);
+     }
+
+     refreshPage(){
+        
+     }
+
+    
     
     render(){
+        console.log(this.props);
+
+        
 
         
        
         return(
             <div>
+            <div className="padd">
             {(this.props.state.fetchedSinglePlaceDet)?(<div className="center">
 
-            <h4>{this.props.state.singlePlaceDet.placeName}</h4>
-            
+            <h4 className="head-title">{this.props.state.singlePlaceDet.placeName}</h4> 
+            <div className="place-img">
+                <img src={this.props.state.singlePlaceDet.img} alt=""/>
+            </div>
+            <p>Latitude: {this.props.state.singlePlaceDet.lat} & Longitude: {this.props.state.singlePlaceDet.lng}</p>
+            <h5 className="rating">Rating :  {this.props.state.singlePlaceDet.rating}</h5>
+            <h4 className="review-head">Reviews</h4>
+            <div className="marg">
+                <p className="review"> {this.props.state.singlePlaceDet.reviews[0]}</p>
+            </div>
 
-               
+            <div className="row">
+                <div className="col s12 m4">
+                    <div className="card">
+                        <div className="card-image crad-i">
+                            <img src={this.props.state.singlePlaceDet.nearestPlaces[0].img} alt=""/>
+                        </div>
+                        <div className="card-content card-c">
+                            <p>{this.props.state.singlePlaceDet.nearestPlaces[0].placeName}
+                            </p>
+                            <Link to={`/placeDetails/${this.props.state.singlePlaceDet.nearestPlaces[0].placeId}`}><button className="btn btn-small" onClick={this.refreshPage}>MORE</button></Link>
+
+                        </div>
+                    </div>
+                </div>
+                <div className="col s12 m4">
+                    <div className="card">
+                        <div className="card-image crad-i">
+                            <img src={this.props.state.singlePlaceDet.nearestPlaces[1].img} alt=""/>
+                        </div>
+                        <div className="card-content card-c">
+                            <p>{this.props.state.singlePlaceDet.nearestPlaces[1].placeName}
+                            </p>
+                            <Link to={`/placeDetails/${this.props.state.singlePlaceDet.nearestPlaces[1].placeId}`}><button className="btn btn-small" onClick={this.refreshPage}>MORE</button></Link>
+
+                        </div>
+                    </div>
+                </div>
+                <div className="col s12 m4">
+                    <div className="card">
+                        <div className="card-image crad-i">
+                            <img src={this.props.state.singlePlaceDet.nearestPlaces[2].img} alt=""/>
+                            <span className="card-title"></span>
+                        </div>
+                        <div className="card-content card-c">
+                            <p>{this.props.state.singlePlaceDet.nearestPlaces[2].placeName}
+                            </p>
+                            <Link to={`/placeDetails/${this.props.state.singlePlaceDet.nearestPlaces[2].placeId}`}><button className="btn btn-small" onClick={this.refreshPage}>MORE</button></Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+
+
                 
             </div>):(
                 <div>
                     {(this.props.state.loadingSingalPlaceDet)?(<div>Loading</div>):(<div></div>)}
                 </div>
             )}
+            </div>
+            
+           
+
             </div>
         
         )
@@ -62,6 +133,9 @@ const getPlaceDet = (dispatch) =>{
             .catch(err=>{
                 dispatch({type:'SINGLE_PLACE_DETAILS_ERROR',payload:err.message})
             })
+        },
+        addPlaceToArray : (place) =>{
+            dispatch({type:'APPEND_PLACE_TO_CUSTOM_TRIP',payload:place})
         }
     }
 }

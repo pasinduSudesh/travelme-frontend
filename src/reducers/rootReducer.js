@@ -16,6 +16,9 @@ const initState = {
     customTripPlaceErr:false,
     hotelsInTrip:[],
     customTripPlan:false,
+    logged:false,
+    loadingMyTrips:false,
+    fetchedMyTrips:false,
     customTripPlaceArrray:[],
     fetchedCustomTripPlan:false,
     searchHotelResults: [{
@@ -160,6 +163,21 @@ const rootReducer = (state=initState, action) =>{
         }
         case "RESET_TRIP":{
             return {...state,customTripPlan:false,customTripPlaceArrray:[]}           
+        }
+        case "LOGGED_IN_USER":{
+            return {...state,logged:true,loggedEmail:action.payload}           
+        }
+        case "LOG_IN_ERROR":{
+            return {...state,logged:false,loggedErrorMsg:action.payload}           
+        }
+        case "GET_MY_TRIPS_BEFORE":{
+            return {...state,loadingMyTrips:true,fetchedMyTrips:false}           
+        }
+        case "GOT_MY_TRIPS":{
+            return {...state,logged:false,loadingMyTrips:false,fetchedMyTrips:true,myTrips:action.payload}           
+        }
+        case "GOT_MY_TRIPS_ERR":{
+            return {...state,logged:false,loadingMyTrips:false,fetchedMyTrips:false}           
         }
         default:{
             return {...state}

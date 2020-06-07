@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import 'materialize-css/dist/css/materialize.min.css';
 // import M from 'materialize-css';
-import '../css/home.css';
+// import '../css/home.css';
 import '../css/hotels.css';
 import {connect} from 'react-redux';
 
@@ -72,12 +72,12 @@ class Hotels extends Component{
                 
                 <div key={i} className="col s12 m4">
                   <div className="card">
-                    <div className="card-image imgs">
+                    <div className="card-image hotel-img">
                       <img src={h.img} alt=""/>
                       <span className="card-title">{h.name}</span>
                       
                     </div>
-                    <div className="card-content">
+                    <div className="card-content content-size">
                       <p><i class="material-icons">location_on</i>{h.address}</p>
                     </div>
                   </div>

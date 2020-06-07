@@ -10,6 +10,7 @@ import Hotels from './components/Hotels';
 import SinglePlace from './components/SinglePlace';
 import Error404 from './components/404';
 import CustomTrip from './components/CustomTripPlan';
+import MyTrips from './components/MyTrips';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 class App extends Component {
@@ -26,6 +27,7 @@ class App extends Component {
           <Route  path='/placeDetails/:id' component={SinglePlace}/>          
           <Route path='/places' component={Places}/>
           <Route path='/customTripPlan' component={CustomTrip}/>
+          <Route path='/myTrips' component={MyTrips}/>
           <Route path='/about' component={About}/>
           <Route path='/content' component={Content}/>
           <Route  component={Error404}/>

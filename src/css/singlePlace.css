@@ -1,0 +1,35 @@
+.place-img img{
+    height: 400px;
+    width: 700px;
+    object-fit: cover;
+}
+.head-title{
+    font-family: fantasy;
+    color: darkcyan;
+}
+.padd{
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.review{
+    padding: 10px;
+    text-align: left;
+    margin-bottom: 10px;
+}
+.marg{
+    margin: 20px;
+}
+.rating{
+    text-align: left;
+    color: maroon;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.review-head{
+    font-size: 1.4em;
+    font-weight: bold;
+    text-align: left;
+}
+.btn-allign{
+    text-align: right;
+}

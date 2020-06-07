@@ -314,7 +314,7 @@ const getPlaceDet = (dispatch) =>{
     return {
         getPlacesForTripPlan:(days,place) =>{
             dispatch({type:'PLAN_TRIP_BEFORE'})
-            axios.post('https://noderestapp.azurewebsites.net/planTrip',{place:place,days:days})
+            axios.post('https://noderestapp.azurewebsites.net/planTrip',{place:place,days:days},{withCredentials: true})
             .then(response=>{
                 if(response.status === 200){
                     dispatch({type:'PLAN_TRIP_GOT',payload:response.data,placeName:place.toUpperCase(),numOfDays:days})
