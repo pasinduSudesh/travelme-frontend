@@ -120,6 +120,10 @@ const getPlaceDet = (dispatch) =>{
                 }
             })
             .catch(err=>{
+                if(err.response?.status === 400){
+                    dispatch({type:'SEARCH_PLACES_ERROR',payload:err.response.data.error.message})
+
+                }
                 dispatch({type:'SEARCH_PLACES_ERROR',payload:err.message})
             })
         }

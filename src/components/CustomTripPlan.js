@@ -6,6 +6,7 @@ import '../css/tripPlan.css'
 import {connect} from 'react-redux';
 
 import PlanedTrip from './PlanedTrip'
+import { Link } from 'react-router-dom';
 
 class CustomTrip extends Component{
 
@@ -57,7 +58,7 @@ class CustomTrip extends Component{
         this.props.state.customTripPlaceArrray.forEach(i=>{
             ids.push(i.placeId)
         })
-        this.props.customTripPlan(ids);
+        this.props.customTripPlan(ids,this.props.state.loggedEmail);
     }
 
     render() {
@@ -73,9 +74,10 @@ class CustomTrip extends Component{
                   <div className="card-stacked">
                     <div className="card-content">
                     <p><strong>{p.placeName}</strong></p>
+                    <p className="address"><i className="material-icons tiny">location_on</i>{p.address}</p>
+                    <Link to={`/placeDetails/${p.placeId}`}><button className="btn btn-small btn-mr">MORE</button></Link>
                     </div>
                     <div className="card-action">
-                      <a href="/">View More</a>
                       {(this.hasPlaceInArray(p))?(
                           <div>
                             <button className="btn btn-small red" onClick={()=>this.removePlaceFromArray(p)}>Remove Form My Trip</button>
@@ -85,6 +87,7 @@ class CustomTrip extends Component{
                             <button className="btn btn-small" onClick={()=>this.addPlace2Array(p)}>Add To My Trip</button>
                           </div>
                       )}
+
                     </div>
                   </div>
                 </div>
@@ -92,6 +95,7 @@ class CustomTrip extends Component{
             ))
         }
         var placeArray = <div></div>
+        
         if(this.props.state.customTripPlaceArrray.length > 0){
             placeArray = this.props.state.customTripPlaceArrray.map( (p,i) =>(
                 <div key={i}>                  
@@ -203,6 +207,7 @@ const dispatchProps = (dispatch) =>{
             dispatch({type:'GET_PLACE_FOR_CUSTOM_TRIP_BEFORE'});
             axios.get(`https://noderestapp.azurewebsites.net/getPlace/${placeName}`)
             .then(response=>{
+                console.log(response)
                 if(response.status === 200){
                     dispatch({type:'GET_PLACE_FOR_CUSTOM_TRIP_RECEIVED',payload:response.data})
                 }else{
@@ -210,7 +215,13 @@ const dispatchProps = (dispatch) =>{
                 }
             })
             .catch(err=>{
-                dispatch({type:'GET_PLACE_FOR_CUSTOM_TRIP_ERROR',payload:err.message})
+                console.log(err.response?.status)
+                if(err.response?.status === 400){
+                    dispatch({type:'GET_PLACE_FOR_CUSTOM_TRIP_ERROR',payload:err.response.data.error.message})
+
+                }else{
+                    dispatch({type:'GET_PLACE_FOR_CUSTOM_TRIP_ERROR',payload:err.message})
+                }
             })
         },
         addPlaceToArray : (place) =>{
@@ -219,9 +230,9 @@ const dispatchProps = (dispatch) =>{
         removePlace : (place) =>{
             dispatch({type:'REMOVE_PLACE_FROM_CUSTOM_TRIP',payload:place})
         },
-        customTripPlan: (placeIds) =>{
+        customTripPlan: (placeIds,email) =>{
             dispatch({type:'CUSTOM_TRIP_PLAN_BEFORE'});
-            axios.post(`https://noderestapp.azurewebsites.net/customTripPlan`,{places:placeIds})
+            axios.post(`https://noderestapp.azurewebsites.net/customTripPlan`,{places:placeIds,email:email})
             .then(response=>{
                 if(response.status === 200){
                     dispatch({type:'CUSTOM_TRIP_PLAN_RECEIVED',payload:response.data})

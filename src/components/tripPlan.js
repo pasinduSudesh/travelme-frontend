@@ -64,8 +64,16 @@ class TripPlan extends Component{
         
     }
     planTrip = e =>{
-        console.log(this.props);
-        this.props.getPlacesForTripPlan(this.state.days,this.state.place)
+        if( this.state.place !== null){
+            if(this.state.place.length > 0){
+                console.log(this.props);
+                this.props.getPlacesForTripPlan(this.state.days,this.state.place, this.props.state.loggedEmail);
+            }else{
+                this.props.errorReport('Please add a place name Eg: Galle, Polonnaruwa, Anureadhapura')
+            }
+        }else{
+            this.props.errorReport('Please add a place name Eg: Galle, Polonnaruwa, Anureadhapura')
+        }
 
         const slider = document.querySelector('.slider');
         M.Slider.init(slider, {
@@ -103,7 +111,7 @@ class TripPlan extends Component{
 
         var facilities = facArray  =>{
             var facis = facArray.map((fac,i)=>(
-                (i<2)?(<span key={i} className="new badge">{fac}</span>):(<div></div>)
+                (i<1)?(<span key={i} className="new badge">{fac}</span>):(<div></div>)
             ))
             return facis
         }
@@ -117,7 +125,7 @@ class TripPlan extends Component{
                       
                         <div className="col s12 m4">
                         <div className="card">
-                            <div className="card-image">
+                            <div className="card-image img-size">
                             <img src={hotel.img} alt=""/>
                             <span className="card-title">{hotel.name}</span>
                             </div>
@@ -125,7 +133,7 @@ class TripPlan extends Component{
                             {facilities(hotel.facilities)}
                             
                             </div>
-                            <div className="card-action">
+                            <div className="card-action action-size">
                             
                             <a href={hotel.hotelUrl} target="_blank" rel="noopener noreferrer" alt="">BOOKING DETAILS</a>
                             </div>
@@ -238,7 +246,7 @@ class TripPlan extends Component{
             {(this.props.state.loading)?(<div className="progress"><div className="indeterminate"></div></div>):(<div></div>)}
 
             {(this.props.state.errMsgPlace)?(<div>
-                <div class="alert">
+                <div className="alert">
                     <strong>Error </strong> {this.props.state.errMsgPlace}
                 </div>
             </div>):(<div>
@@ -248,14 +256,14 @@ class TripPlan extends Component{
             <section className="slider">
         <ul className="slides">
             <li>
-                <img src={this.props.state.tripPlaces[0].img} Style=" object-fit: cover" alt=""/>
+                <img src={this.props.state.tripPlaces[0].img}  alt=""/>
                 <div className="caption left-align">
                 <h2>{this.props.state.tripNumberOfDays} Days in {this.props.state.tripCenterPoint}</h2>
                 
                 </div>
             </li>
             <li>
-            <img src={this.props.state.tripPlaces[1].img} Style=" object-fit: cover" alt=""/>
+            <img src={this.props.state.tripPlaces[1].img}  alt=""/>
                 <div className="caption right-align">
                 
                 <h2>{this.props.state.tripNumberOfDays} Days in {this.props.state.tripCenterPoint}</h2>
@@ -312,9 +320,9 @@ const getProps = (state)=>{
 }
 const getPlaceDet = (dispatch) =>{
     return {
-        getPlacesForTripPlan:(days,place) =>{
+        getPlacesForTripPlan:(days,place,email) =>{
             dispatch({type:'PLAN_TRIP_BEFORE'})
-            axios.post('https://noderestapp.azurewebsites.net/planTrip',{place:place,days:days},{withCredentials: true})
+            axios.post('https://noderestapp.azurewebsites.net/planTrip',{place:place,days:days,email:email})
             .then(response=>{
                 if(response.status === 200){
                     dispatch({type:'PLAN_TRIP_GOT',payload:response.data,placeName:place.toUpperCase(),numOfDays:days})
@@ -323,7 +331,11 @@ const getPlaceDet = (dispatch) =>{
                 }                
             })
             .catch(err=>{
-                dispatch({type:'PLAN_TRIP_ERROR',payload:err.message})
+                if(err.response?.status === 400){
+                    dispatch({type:'PLAN_TRIP_ERROR',payload:err.response.data.error.message})            
+                }else{
+                    dispatch({type:'PLAN_TRIP_ERROR',payload:err.message})
+                }
             });
         },
 
@@ -338,8 +350,19 @@ const getPlaceDet = (dispatch) =>{
                 }                
             })
             .catch(err=>{
-                dispatch({type:'FIND_NEAREST_HOTEl_ERROR',payload:err.message})
+                if(err.response?.status){
+                    if(err.response.status === 400){
+                        dispatch({type:'FIND_NEAREST_HOTEl_ERROR',payload:err.response.data.err.message})
+                    }
+                }
+               else{
+                    dispatch({type:'FIND_NEAREST_HOTEl_ERROR',payload:err.message})
+                }
             });
+        },
+
+        errorReport: (err)=>{
+            dispatch({type:'PLAN_TRIP_ERROR',payload:err})
         }
         
     }

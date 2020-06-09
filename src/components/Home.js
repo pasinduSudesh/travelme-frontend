@@ -12,10 +12,11 @@ import {connect} from 'react-redux';
 class Home extends Component{
 
     state = {
-        name:'',
+        name:"",
         place:'',
         review:'',
         reviewMsg:false,
+        addReviewLoading:false,
         bestplaces:null
     }
 
@@ -25,20 +26,32 @@ class Home extends Component{
     }
     submitHandler = e =>{
         e.preventDefault();
-        console.log(this.state);
-        axios.post('https://noderestapp.azurewebsites.net/addReview',{name:this.state.name,place:this.state.place,review:this.state.review})
-        .then(response =>{
-            if (response.data){
-                this.setState({
-                    reviewMsg :"Thank you.Your review is Saved..!",
-                    name:"",
-                    place:"",
-                    review:""
-                    })
-            } 
-        }).catch(error =>{
-            console.log(error);
-        })
+        console.log(this.state,"aaaaa");
+        if(this.state.name.length>0 && this.state.place.length>0 && this.state.review.length>0){
+            this.setState({
+                addReviewLoading:true
+            })
+            console.log(this.state,"bbbbb");
+            axios.post('https://noderestapp.azurewebsites.net/addReview',{name:this.state.name,place:this.state.place,review:this.state.review})
+            .then(response =>{
+                console.log(response.data)
+                if (response.data){
+                    this.setState({
+                        name:"",
+                        place:"",
+                        review:"",
+                        reviewMsg:response.data.message,
+                        addReviewLoading:false,
+                        })
+                } 
+            }).catch(error =>{
+                console.log(error);
+            })
+        }else{
+            this.setState({
+                reviewMsg:"Please Enter Values"
+            })
+        }
     }
 
     
@@ -83,6 +96,7 @@ class Home extends Component{
 
     render(){
         const {name, place,review} = this.state
+
         // this.props.getBestPlaces();
         // console.log(this.props.state);
         return(
@@ -95,30 +109,30 @@ class Home extends Component{
                         <div className="caption center-align">
                         <h2>Plan Your Trip</h2>
                         <h5 className="light grey-text text-lighten-3 hide-on-small-only">Let us plan your trip with the best places</h5>
-                        <a href="/" className="btn btn-large">Learn More</a>
+                        <a href="/places" className="btn btn-large">Learn More</a>
                         </div>
                     </li>
                     <li>
                         <img src="https://image.ibb.co/mn1egc/resort2.jpg" alt=""/>
                         <div className="caption left-align">
-                        <h2>Best places for stay</h2>
+                        <h2>Best Hotels for Stay</h2>
                         <h5 className="light grey-text text-lighten-3 hide-on-small-only">We can mention best hotels in your traveling area</h5>
-                        <a href="/" className="btn btn-large">Learn More</a>
+                        <a href="/hotels" className="btn btn-large">Learn More</a>
                         </div>
                     </li>
                     <li>
                         <img src="https://image.ibb.co/mbCVnH/resort3.jpg" alt=""/>
                         <div className="caption right-align">
-                        <h2>Best taxis for hire</h2>
-                        <h5 className="light grey-text text-lighten-3 hide-on-small-only">We can hire best taxi riders for you</h5>
-                        <a href="/" className="btn btn-large">Learn More</a>
+                        <h2>Customize Your Trip</h2>
+                        <h5 className="light grey-text text-lighten-3 hide-on-small-only">You can customize your trip with your favourite places</h5>
+                        <a href="/customTripPlan" className="btn btn-large">Learn More</a>
                         </div>
                     </li>
                 </ul>
             </section>
             {/* slider end */}
             {/* search start */}
-            <section id="search" className="section section-search teal darken-1 white-text center scrollspy">
+            {/* <section id="search" className="section section-search teal darken-1 white-text center scrollspy">
                 <div className="container">
                 <div className="row">
                     <div className="col s12">
@@ -140,38 +154,38 @@ class Home extends Component{
                     </div>
                 </div>
                 </div>
-            </section>
+            </section> */}
             {/* search end */}
             {/* icon box start */}
             <section className="section section-icons grey lighten-4 center">
                 <div className="container">
                     <div className="row">
-                        <div className="col s12 m4">
+                        <div className="col s12 m6">
                         
                         <div className="card-panel">
                             <i className="material-icons large teal-text">room</i>
                             <h4>Places</h4>
                             <p>Find best places to visit & enjoy the nature</p>
-                            <a href="/" className="btn btn-small">Learn More</a>    
+                            <a href="/places" className="btn btn-small">Learn More</a>    
                         </div>
                         
                         </div>
-                        <div className="col s12 m4">
+                        <div className="col s12 m6">
                         <div className="card-panel">
                             <i className="material-icons large teal-text">store</i>
                             <h4>Hotels</h4>
                             <p>Find best hotels with best hospitality</p>
-                            <a href="/" className="btn btn-small">Learn More</a>   
+                            <a href="/hotels" className="btn btn-small">Learn More</a>   
                         </div>
                         </div>
-                        <div className="col s12 m4">
+                        {/* <div className="col s12 m4">
                         <div className="card-panel">
                             <i className="material-icons large teal-text">time_to_leave</i>
                             <h4>Taxi</h4>
                             <p>Find taxis for reach your destinations</p>
-                            <a href="/" className="btn btn-small">Learn More</a>   
+                            <a href="/customTripPlan" className="btn btn-small">Learn More</a>   
                         </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
@@ -284,31 +298,31 @@ class Home extends Component{
 
                     <div className="row">
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?srilanka" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?anuradhapura" alt=""/>
                         </div>
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?traveling" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?jaffna" alt=""/>
                         </div>
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?bridge" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?ampara" alt=""/>
                         </div>
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?boat, travel" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?rathnapura" alt=""/>
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?water" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?badulla" alt=""/>
                         </div>
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?building" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?galle" alt=""/>
                         </div>
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?trees" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?hikkaduwa" alt=""/>
                         </div>
                         <div className="col s12 m3">
-                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?cruise" alt=""/>
+                        <img className="materialboxed responsive-img" src="https://source.unsplash.com/1600x900/?waterfall" alt=""/>
                         </div>
                     </div>
                 </div>
@@ -354,8 +368,29 @@ class Home extends Component{
                                     <textarea className="materialize-textarea" placeholder="Enter Your Idea about place" id="message" name="review" value={review} onChange={this.changeHandeler}></textarea>
                                     <label for="message">Reviews</label>
                                 </div>
+                                
+                                {(this.state.addReviewLoading)?(
+                                    <div className="row">
+                                <div className="preloader-wrapper small active">
+                                        <div className="spinner-layer spinner-green-only">
+                                        <div className="circle-clipper left">
+                                            <div className="circle"></div>
+                                        </div><div className="gap-patch">
+                                            <div className="circle"></div>
+                                        </div><div className="circle-clipper right">
+                                            <div className="circle"></div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                ):(<div></div>)}
+                                
+                                
                                 <input type="submit" value="Submit" className="btn"/>
+                                
+        
                                 </form>
+                                
                             </div>
                         </div>
                     </div>

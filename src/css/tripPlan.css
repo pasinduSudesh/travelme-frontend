@@ -178,8 +178,11 @@
   color: black;
 }
 
-/* .img-sizing img{
-  height: 200px;
-  width: 400px;
+.img-size img{
+  height:300px;
+  width:300px;
   object-fit: cover;
-} */
+}
+.action-size{
+  height: 50px;
+}

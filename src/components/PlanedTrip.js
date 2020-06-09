@@ -107,7 +107,7 @@ class PlanedTrip extends Component{
 
         var facilities = facArray  =>{
             var facis = facArray.map((fac,i)=>(
-                (i<2)?(<span key={i} className="new badge">{fac}</span>):(<div></div>)
+                (i<2)?(<span key={i} className="new badge">{fac}</span>):(<div key={i} ></div>)
             ))
             return facis
         }
@@ -232,14 +232,14 @@ class PlanedTrip extends Component{
             <section className="slider">
         <ul className="slides">
             <li>
-                <img src={this.props.state.tripPlaces[0].img} Style=" object-fit: cover" alt=""/>
+                <img src={this.props.state.tripPlaces[0].img}  alt=""/>
                 <div className="caption left-align">
                
                 
                 </div>
             </li>
             <li>
-            <img src={this.props.state.tripPlaces[1].img} Style=" object-fit: cover" alt=""/>
+            <img src={this.props.state.tripPlaces[1].img} alt=""/>
                 <div className="caption right-align">
                 
                 

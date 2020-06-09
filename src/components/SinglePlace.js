@@ -8,7 +8,6 @@ import 'materialize-css/dist/css/materialize.min.css';
 import {connect} from 'react-redux';
 import '../css/singlePlace.css'
 // import { withScriptjs, withGoogleMap, GoogleMap} from "react-google-maps"
-import { Link } from 'react-router-dom';
 
 
 
@@ -24,6 +23,10 @@ class SingalPlace extends Component{
 
      refreshPage(){
         
+     }
+
+     getData = (id) =>{
+        this.props.getData(id);
      }
 
     
@@ -50,8 +53,8 @@ class SingalPlace extends Component{
             <div className="marg">
                 <p className="review"> {this.props.state.singlePlaceDet.reviews[0]}</p>
             </div>
-
             <div className="row">
+            {(this.props.state.singlePlaceDet.nearestPlaces.length > 0)?(
                 <div className="col s12 m4">
                     <div className="card">
                         <div className="card-image crad-i">
@@ -60,11 +63,17 @@ class SingalPlace extends Component{
                         <div className="card-content card-c">
                             <p>{this.props.state.singlePlaceDet.nearestPlaces[0].placeName}
                             </p>
-                            <Link to={`/placeDetails/${this.props.state.singlePlaceDet.nearestPlaces[0].placeId}`}><button className="btn btn-small" onClick={this.refreshPage}>MORE</button></Link>
+                            <button className="btn btn-small" onClick={()=>this.getData(this.props.state.singlePlaceDet.nearestPlaces[0].placeId)}>MORE</button>
 
                         </div>
                     </div>
                 </div>
+
+            ):(<div></div>)}
+            
+            {(this.props.state.singlePlaceDet.nearestPlaces.length > 1)?(
+                
+                
                 <div className="col s12 m4">
                     <div className="card">
                         <div className="card-image crad-i">
@@ -73,11 +82,15 @@ class SingalPlace extends Component{
                         <div className="card-content card-c">
                             <p>{this.props.state.singlePlaceDet.nearestPlaces[1].placeName}
                             </p>
-                            <Link to={`/placeDetails/${this.props.state.singlePlaceDet.nearestPlaces[1].placeId}`}><button className="btn btn-small" onClick={this.refreshPage}>MORE</button></Link>
+                            <button className="btn btn-small" onClick={()=>this.getData(this.props.state.singlePlaceDet.nearestPlaces[1].placeId)}>MORE</button>
 
                         </div>
                     </div>
                 </div>
+
+                ):(<div></div>)}
+
+                {(this.props.state.singlePlaceDet.nearestPlaces.length > 2)?(
                 <div className="col s12 m4">
                     <div className="card">
                         <div className="card-image crad-i">
@@ -87,10 +100,12 @@ class SingalPlace extends Component{
                         <div className="card-content card-c">
                             <p>{this.props.state.singlePlaceDet.nearestPlaces[2].placeName}
                             </p>
-                            <Link to={`/placeDetails/${this.props.state.singlePlaceDet.nearestPlaces[2].placeId}`}><button className="btn btn-small" onClick={this.refreshPage}>MORE</button></Link>
+                            {/* <Link to={`/placeDetails/${this.props.state.singlePlaceDet.nearestPlaces[2].placeId}`}><button className="btn btn-small" onClick={this.refreshPage}>MORE</button></Link> */}
+                            <button className="btn btn-small" onClick={()=>this.getData(this.props.state.singlePlaceDet.nearestPlaces[2].placeId)}>MORE</button>
                         </div>
                     </div>
                 </div>
+            ):(<div></div>)}
             </div>
            
 
@@ -98,7 +113,7 @@ class SingalPlace extends Component{
                 
             </div>):(
                 <div>
-                    {(this.props.state.loadingSingalPlaceDet)?(<div>Loading</div>):(<div></div>)}
+                    {(this.props.state.loadingSingalPlaceDet)?( <div className="progress"><div className="indeterminate"></div></div>):(<div></div>)}
                 </div>
             )}
             </div>

@@ -1,7 +1,7 @@
 import React, {Component}from 'react';
 import { Link , NavLink} from 'react-router-dom';
 import '../css/navbar.css'
-import axios from 'axios';
+// import axios from 'axios';
 import GoogleLogin from 'react-google-login';
 import {connect} from 'react-redux';
 
@@ -15,7 +15,7 @@ class Navbar extends Component{
         console.log(response)
         this.setState({email:response.profileObj.email})
         this.setState({name:response.profileObj.givenName})
-        this.props.login(this.state.email);
+        this.props.login(this.state.email,response.profileObj.givenName);
     }
     render(){
     return(
@@ -114,20 +114,8 @@ const getProps = (state)=>{
 
 const getPlaceDet = (dispatch) =>{
     return {
-        login: (email)=>{
-            dispatch({type:'LOG_IN_USER_BEFORE'})
-            axios.post('https://noderestapp.azurewebsites.net/auth/login',{email:email})
-            .then(response=>{
-                console.log(response);
-                if(response.status ===  200){
-                    dispatch({type:'LOGGED_IN_USER',payload:email})
-                }else{
-                    dispatch({type:'LOG_IN_ERROR',payload:'Error when fetching backend API'})
-                }            
-            }).catch(err=>{
-                console.log(err);
-                dispatch({type:'LOG_IN_ERROR',payload:err.message})
-            })
+        login: (email,username)=>{
+            dispatch({type:'LOGGED_IN_USER',payload:email,username:username})
         }
     }
 }

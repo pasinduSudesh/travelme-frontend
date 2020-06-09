@@ -16,8 +16,16 @@ class Hotels extends Component{
     }
 
     searchHotels = ()=>{
-
-        this.props.searchHotels(this.state.place);
+        if(this.state.place !== null){
+            if(this.state.place.length >0){
+                this.props.searchHotels(this.state.place);
+            }else{
+                this.props.hotelError("Add a pace name to get nearest hotels..")
+            }
+        }else{
+            this.props.hotelError("Add a pace name to get nearest hotels..")
+        }
+       
 
     }
 
@@ -48,7 +56,7 @@ class Hotels extends Component{
                 <div key={hotel.img} className="container">
                 <div className="col s12 m7">
                     <div className="card horizontal">
-                        <div className="card-image">
+                        <div className="card-image image-siz">
                             <img src={hotel.img} className="fadeIn" alt=""/>
                         </div>
                         <div className="card-stacked">
@@ -78,7 +86,7 @@ class Hotels extends Component{
                       
                     </div>
                     <div className="card-content content-size">
-                      <p><i class="material-icons">location_on</i>{h.address}</p>
+                      <p><i className="material-icons">location_on</i>{h.address}</p>
                     </div>
                   </div>
                 </div>
@@ -102,6 +110,9 @@ class Hotels extends Component{
                         </div>
                     </div>                   
             </section>
+            {(this.props.state.searchHotelErrMsg)?(<div className="alert">
+                        <strong>Error</strong> {this.props.state.searchHotelErrMsg}
+                    </div>):(<div></div>)}
             {(this.props.state.loadingSearchHotels)?(<div className="progress"><div className="indeterminate"></div></div>):(<div></div>)}
             {(this.props.state.fetchedSeachHotels)?(hotelDet):(<div className="row">{hotelDet}</div>)}
             
@@ -128,8 +139,16 @@ const getPlaceDet = (dispatch) =>{
                 }
             })
             .catch(err=>{
-                dispatch({type:'SEARCH_HOTEL_ERROR',payload:err.message})
+                if(err.response?.status === 400){
+                    dispatch({type:'SEARCH_HOTEL_ERROR',payload:err.response.data.error.message})
+                }else{
+                    dispatch({type:'SEARCH_HOTEL_ERROR',payload:err.message})
+                }
+                
             })
+        },
+        hotelError: (err) =>{
+            dispatch({type:'SEARCH_HOTEL_ERROR',payload:err})
         }
     }
 }

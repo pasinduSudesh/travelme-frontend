@@ -4,7 +4,7 @@ const initState = {
     loading:false,
     fetchedPlace:false,
     errMsgPlace:false,
-    errMsgHotel:null,
+    errMsgHotel:false,
     fetchedTripPlaceData:false,
     loadingHotel:false,
     loadingSearchHotels:false,
@@ -17,10 +17,14 @@ const initState = {
     hotelsInTrip:[],
     customTripPlan:false,
     logged:false,
+    loggedUsername:"",
+    loggedEmail:false,
     loadingMyTrips:false,
     fetchedMyTrips:false,
     customTripPlaceArrray:[],
     fetchedCustomTripPlan:false,
+    viewMyPastTrip:false,
+    searchHotelErrMsg:false,
     searchHotelResults: [{
         "facilities": [
             "Free parking","Free High Speed Internet (WiFi)","Pool","Free breakfast","Children Activities (Kid / Family Friendly)","Pets Allowed ( Dog / Pet Friendly )",
@@ -85,7 +89,7 @@ const rootReducer = (state=initState, action) =>{
     console.log(action);
     switch (action.type){
         case "SEARCH_PLACE_BEFORE":{
-            return {...state,loading:true}                       
+            return {...state,loading:true,errMsgPlace:false}                       
         }
         case "SEARCH_PLACE_RECEIVED":{
             return {...state,loading:false,fetchedPlace:true,searchedPlaces:action.payload}            
@@ -94,7 +98,7 @@ const rootReducer = (state=initState, action) =>{
             return {...state,loading:false,fetchedPlace:false,errMsgPlace:action.payload}            
         }
         case "PLAN_TRIP_BEFORE":{
-            return {...state,loading:true}            
+            return {...state,loading:true,errMsgPlace:false,fetchedTripPlaceData:false}            
         }
         case "PLAN_TRIP_GOT":{
             return {...state,loading:false,fetchedTripPlaceData:true,tripPlaces:action.payload.trip,tripDistances:action.payload.distances,tripNumberOfDays:action.numOfDays,tripCenterPoint:action.placeName,errMsgPlace:false}            
@@ -103,7 +107,7 @@ const rootReducer = (state=initState, action) =>{
             return {...state,loading:false,fetchedPlace:false,errMsgPlace:action.payload}            
         }
         case "FIND_NEAREST_HOTEL_BEFORE":{
-            return {...state,loadingHotel:true}            
+            return {...state,loadingHotel:true,errMsgHotel:false}            
         }
         case "FIND_NEAREST_HOTEL_GOT":{
             state.hotelsInTrip.push({id:action.placeId,data:action.payload})
@@ -116,7 +120,7 @@ const rootReducer = (state=initState, action) =>{
             return {...state,bestPlaces:action.payload}            
         }
         case "SEARCH_HOTEL_BEFORE":{
-            return {...state,loadingSearchHotels:true}            
+            return {...state,loadingSearchHotels:true,searchHotelErrMsg:false}            
         }
         case "SEARCH_HOTEL_RECEIVED":{
             return {...state,loadingSearchHotels:false,fetchedSeachHotels:true,searchHotelResults:action.payload}            
@@ -125,7 +129,7 @@ const rootReducer = (state=initState, action) =>{
             return {...state,loadingSearchHotels:false,fetchedSeachHotels:false,searchHotelErrMsg:action.payload}            
         }
         case "SINGLE_PLACE_DETAILS_BEFORE":{
-            return {...state,loadingSingalPlaceDet:true,fetchedSinglePlaceDet:false}            
+            return {...state,loadingSingalPlaceDet:true,fetchedSinglePlaceDet:false,singlePlaceDetErr:false}            
         }
         case "SINGLE_PLACE_DETAILS_GOT":{
             return {...state,loadingSingalPlaceDet:false,fetchedSinglePlaceDet:true,singlePlaceDet:action.payload}            
@@ -165,7 +169,7 @@ const rootReducer = (state=initState, action) =>{
             return {...state,customTripPlan:false,customTripPlaceArrray:[]}           
         }
         case "LOGGED_IN_USER":{
-            return {...state,logged:true,loggedEmail:action.payload}           
+            return {...state,logged:true,loggedEmail:action.payload,loggedUsername:action.username}           
         }
         case "LOG_IN_ERROR":{
             return {...state,logged:false,loggedErrorMsg:action.payload}           
@@ -174,10 +178,13 @@ const rootReducer = (state=initState, action) =>{
             return {...state,loadingMyTrips:true,fetchedMyTrips:false}           
         }
         case "GOT_MY_TRIPS":{
-            return {...state,logged:false,loadingMyTrips:false,fetchedMyTrips:true,myTrips:action.payload}           
+            return {...state,loadingMyTrips:false,fetchedMyTrips:true,myTrips:action.payload}           
         }
         case "GOT_MY_TRIPS_ERR":{
-            return {...state,logged:false,loadingMyTrips:false,fetchedMyTrips:false}           
+            return {...state,loadingMyTrips:false,fetchedMyTrips:false}           
+        }
+        case "VIEW_MY_TRIP":{
+            return {...state,viewMyPastTrip:true,customTripPlan:false,fetchedTripPlaceData:true,tripPlaces:action.payload.trip,tripDistances:action.payload.distances}           
         }
         default:{
             return {...state}

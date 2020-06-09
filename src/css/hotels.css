@@ -1,5 +1,7 @@
 .padding-content{
     padding :5px !important;
+    overflow: hidden;
+    height: 300px !important;
 
 }
 .hotel-name{
@@ -63,3 +65,8 @@
  
       object-fit: cover;
   } */
+.image-siz img{
+    height:300px;
+    width:150px;
+    object-fit: cover;
+}
