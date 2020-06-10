@@ -41,7 +41,7 @@ class Navbar extends Component{
                     </a>
                     <div className="right">
                         {/* <button className="btn btn-small white">LogIn</button> */}
-                        <GoogleLogin
+                        <GoogleLogin  
                             clientId="1008932353060-je8amtlpk0i9uhnivtkj3j7drfhb218p.apps.googleusercontent.com"
                             buttonText=""
                             onSuccess={this.responseGoogle}
